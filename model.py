@@ -64,7 +64,7 @@ prompt = [
 ]
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(MODEL_NAME)
+    model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
     return response.text
 
@@ -80,7 +80,7 @@ def extract_contextualization(response):
     return response[start:].strip()
 
 def generate_sql_query(question, prompt):
-    model = genai.GenerativeModel(MODEL_NAME)
+    model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
 
     # Assuming the SQL query is enclosed in backticks
