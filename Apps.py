@@ -1,3 +1,5 @@
+# app.py
+
 from imports import *
 import model
 
@@ -14,7 +16,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Get user input
-if prompt := st.chat_input("Ask a question about Taif medical institutions"):
+if prompt := st.chat_input(""):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -25,8 +27,19 @@ if prompt := st.chat_input("Ask a question about Taif medical institutions"):
         # Extract only the contextualized response
         contextualized_response = extract_contextualized_response(response)
 
-        # Add the cleaned-up assistant response to the chat history
-        st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
+        # Check if the question is irrelevant
+        if "This question cannot be answered using the Taif medical institutions database" in contextualized_response:
+            # Display the full response for irrelevant questions
+            st.session_state.messages.append({"role": "assistant", "content": contextualized_response})  
+        else:
+            # Extract SQL query and contextualization
+            sql_query = extract_sql_query(response)
+
+            # Execute the query
+            execute_query(sql_query)
+
+            # Add assistant message to chat history
+            st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
 
     except Exception as e:
         # Handle exceptions and add error message to chat
