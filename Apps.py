@@ -35,28 +35,37 @@ if prompt := st.chat_input("Type your message here..."):
 
 # Display chat messages from history
 for i, message in enumerate(st.session_state.messages):
+    alignment_class = "user-message" if message["role"] == "user" else "assistant-message"
     with st.container(key=f"{message['role']}_{i}"):
-        alignment_class = "assistant-message" if message["role"] == "assistant" else "user-message"
         with st.chat_message(message["role"]):
-            st.write(message["content"], unsafe_allow_html=True)
+            st.markdown(f"<div class='{alignment_class}'>{message['content']}</div>", unsafe_allow_html=True)
 
 # Add styling for chat alignment
 st.markdown(
     """
     <style>
-    [data-testid="stChatMessage"] {
-        flex-direction: row; /* Default for user */
-    }
-    [data-testid="stChatMessage.user-message"] {
-        flex-direction: row-reverse; /* User message on the left */
+    /* User messages aligned to the left */
+    .user-message {
         text-align: left;
+        background-color: #f1f1f1;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 5px 0;
     }
-    [data-testid="stChatMessage.assistant-message"] {
-        flex-direction: row; /* Assistant message on the right */
+
+    /* Assistant messages aligned to the right */
+    .assistant-message {
         text-align: right;
+        background-color: #d9edf7;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 5px 0;
     }
-    [data-testid="stChatMessage"] .stChatMessageBox {
-        max-width: 80%; /* Adjust box width for better alignment */
+
+    /* Make sure the chat bubbles look nice */
+    [data-testid="stChatMessage"] {
+        max-width: 80%;
+        margin: auto;
     }
     </style>
     """,
