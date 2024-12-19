@@ -20,8 +20,7 @@ DATABASE_NAME = "taif_medical.db"
 MODEL_NAME = "gemini-pro"
 
 # Import from the correct location
-from utils.database import execute_query
+from utils.database import execute_query, format_results  # Import format_results
 
 # Only import get_gemini_response from model.py
 from model import get_gemini_response
-
