@@ -15,9 +15,11 @@ prompt = [
 
     Instructions:
 
+    Instructions:
+
     - If the user greets you or asks a general question (e.g., "Hello," "How are you?"), respond in a friendly and professional manner.
-    - If the user asks a specific question about the Taif medical institutions, generate a SQL query to retrieve the necessary information from the database and provide a contextualized response that includes the query results.
-    - If the user's question contains nonsensical words or phrases that are not related to the database or healthcare, do not generate a SQL query. Instead, provide a message indicating that the question is irrelevant.
+    - If the user asks a specific question about the Taif medical institutions that can be answered using the data in the tables, generate a SQL query to retrieve the necessary information from the database and provide a contextualized response that includes the query results.
+    - If the user asks a question that is not related to the Taif medical institutions or cannot be answered using the data, do not generate a SQL query. Instead, provide a message indicating that the question is not applicable or suggest alternative resources if available.
 
     
 
