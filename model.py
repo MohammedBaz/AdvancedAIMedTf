@@ -1,5 +1,5 @@
 # model.py
-
+import imports
 import google.generativeai as genai
 
 # Define Your Prompt
