@@ -1,7 +1,5 @@
 # model.py
 import google.generativeai as genai
-# Configure Genai Key
-#genai.configure(api_key=config.API_KEY)
 
 # Define Your Prompt
 prompt = [
@@ -49,7 +47,7 @@ prompt = [
 ]
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(MODEL_NAME)
+    model = genai.GenerativeModel(MODEL_NAME)  # Access MODEL_NAME directly
     response = model.generate_content([prompt[0], question])
     return response.text
 
