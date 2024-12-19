@@ -19,23 +19,54 @@ prompt = [
 
     Instructions:
 
-- If the user asks a question about the Taif medical institutions, ALWAYS generate a SQL query to retrieve the relevant information from the database.
-- Ensure that the generated SQL query uses the correct table and column names from the database schema (MedicalInstitutions, WaitingTimes, KPIs).
-- The SQL query should be specific enough to answer the user's question accurately.
+    - If the user greets you or asks a general question (e.g., "Hello," "How are you?"), respond in a friendly and professional manner.
+    - If the user asks a specific question about the Taif medical institutions that can be answered using the data in the tables, generate a SQL query to retrieve the necessary information from the database, execute the query, and provide ONLY the answer based on the query results.
+    - If the user asks a question that is not related to the Taif medical institutions or cannot be answered using the data, provide a message indicating that the question is not applicable or suggest alternative resources if available.
 
     Please provide ONLY the answer to the question as your output.
     """
 ]
 
-def extract_sql_query(response):
-    # Assuming the SQL query is enclosed in backticks
-    start = response.find("`") + 1
-    end = response.find("`", start)
-    return response[start:end]
+def execute_query(query):
+    conn = sqlite3.connect(imports.DATABASE_NAME)
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
+        results = cur.fetchall()
+        # Get column names from cursor description
+        col_names = [desc[0] for desc in cur.description]
+        # Convert to DataFrame for easier handling
+        df = pd.DataFrame(results, columns=col_names)
+        return df
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+        return None
+    finally:
+        conn.close()
 
 def get_gemini_response(question, prompt):
     model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
+
+    # Access the 'text' attribute of the response
+    response_text = response.text
+
+    # Assuming the SQL query is enclosed in backticks
+    start = response_text.find("`") + 1
+    end = response_text.find("`", start)
+    sql_query = response_text[start:end]
+
+    # Execute the query and get the result
+    result_df = execute_query(sql_query)
+
+    # Check if the question is irrelevant
+    if "This question cannot be answered using the Taif medical institutions database" in response_text:
+        return response_text.strip()
     
-    # Return the response from Gemini directly
-    return response.text
+    # Return the result from the database
+    if result_df is not None:
+        # Assuming the result is a single value, you might need to adjust this based on your query
+        answer = result_df.iloc[0, 0] if not result_df.empty else "No data found."
+        return str(answer)
+    else:
+        return "Error executing SQL query."
