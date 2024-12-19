@@ -7,11 +7,6 @@ import model
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat messages from history
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
 # Get user input
 if prompt := st.chat_input(""):  # Remove the placeholder text
     # Add user message to chat history
@@ -39,3 +34,8 @@ if prompt := st.chat_input(""):  # Remove the placeholder text
     except Exception as e:
         with st.chat_message("assistant"):
             st.markdown(f"Error: {e}")
+
+# Display chat messages from history (moved outside the input handling block)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
