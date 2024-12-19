@@ -21,8 +21,17 @@ if prompt := st.chat_input(""):
             # Display the full response for irrelevant questions
             st.session_state.messages.append({"role": "assistant", "content": response})  
         else:
-            # Add assistant message to chat history (answer only)
-            st.session_state.messages.append({"role": "assistant", "content": response})
+            # Extract the SQL query
+            sql_query = model.extract_sql_query(response)
+
+            # Execute the query and get the results
+            results = execute_query(sql_query)  
+
+            # Format the results
+            formatted_results = format_results(results)
+
+            # Add assistant message to chat history (formatted results only)
+            st.session_state.messages.append({"role": "assistant", "content": formatted_results})
 
     except Exception as e:
         st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
