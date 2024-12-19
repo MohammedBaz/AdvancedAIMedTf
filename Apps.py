@@ -1,5 +1,6 @@
 # app.py
 
+import model  # Import the model module here
 from imports import *
 
 # Initialize chat history
