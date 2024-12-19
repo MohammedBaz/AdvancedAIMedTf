@@ -12,7 +12,7 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 # Get user input
 if prompt := st.chat_input("Enter your question:"):
     # Add user message to chat history
@@ -43,3 +43,7 @@ if prompt := st.chat_input("Enter your question:"):
     except Exception as e:
         with st.chat_message("assistant"):
             st.markdown(f"Error: {e}")
+    
+
+
+
