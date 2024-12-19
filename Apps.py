@@ -1,4 +1,4 @@
-import config.py
+import config
 import sqlite3
 import pandas as pd
 import random
