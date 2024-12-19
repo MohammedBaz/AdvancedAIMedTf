@@ -35,10 +35,10 @@ if prompt := st.chat_input(""):
         st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
 
 # Display chat messages from history
-for i, message in enumerate(st.session_state.messages):  # Add an index to the loop
-    with st.container(key=f"{message['role']}_{i}"):  # Include the index in the key
+for i, message in enumerate(st.session_state.messages):
+    with st.container(key=f"{message['role']}_{i}"):
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            st.write(message["content"])  # Use st.write instead of st.markdown
 
 # Add styling for the assistant messages
 st.markdown(
