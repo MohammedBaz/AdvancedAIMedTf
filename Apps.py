@@ -11,6 +11,7 @@ import streamlit as st
 # Configure Genai Key
 genai.configure(api_key=st.secrets["GeminiKey"])  # Replace with your actual Gemini Pro API key
 
+
 # --- Database Generation ---
 
 # Define the number of random entries to create
@@ -125,7 +126,7 @@ def get_gemini_response(question, prompt):
 
 # --- Interface ---
 
-
+import streamlit as st
 
 # Function to execute SQL query and return results as DataFrame
 def execute_query(query):
@@ -149,6 +150,17 @@ def execute_query(query):
     finally:
         conn.close()
 
+def extract_sql_query(response):
+    # Assuming the SQL query is enclosed in backticks
+    start = response.find("`") + 1
+    end = response.find("`", start)
+    return response[start:end]
+
+def extract_contextualization(response):
+    # Assuming the context comes after the SQL query
+    start = response.find("`", response.find("`") + 1) + 1  # Find the second backtick
+    return response[start:].strip()
+
 # Streamlit app
 st.title("NL2SQL with Gemini Pro and Contextualization")
 
@@ -159,15 +171,17 @@ if user_question:
     try:
         response = get_gemini_response(user_question, prompt)
 
-        # You'll need to implement these functions to extract the SQL and context
-        # sql_query = extract_sql_query(response)
-        # contextualized_response = extract_contextualization(response)
+        # Extract SQL query and contextualization from the response
+        sql_query = extract_sql_query(response)
+        contextualized_response = extract_contextualization(response)
 
-        # For now, let's just display the raw response
-        st.write(response)
-
+        st.write("Generated SQL query:", sql_query)
+        
         # Execute the query (if you have extracted the SQL query)
-        # execute_query(sql_query)
+        execute_query(sql_query)
+
+        if contextualized_response:
+            st.write(contextualized_response)
 
     except Exception as e:
         st.write(f"Error: {e}")
