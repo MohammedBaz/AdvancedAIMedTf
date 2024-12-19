@@ -11,7 +11,7 @@ prompt = [
 ]
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(config.MODEL_NAME)
+    model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
     return response.text
 
