@@ -1,9 +1,11 @@
+# app.py
+
 from imports import *
 import model
 
 # Initialize chat history
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages =
 
 # Get user input
 if prompt := st.chat_input(""):
@@ -34,5 +36,21 @@ if prompt := st.chat_input(""):
 
 # Display chat messages from history
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    with st.container(key=f"{message['role']}"):  # Add a key to the container
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+# Add styling for the assistant messages
+st.markdown(
+    """
+    <style>
+    [data-testid="stChatMessage"] {
+        flex-direction: row-reverse;
+    }
+    [data-testid="stChatMessage"] .stChatMessageBox {
+        text-align: right;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
