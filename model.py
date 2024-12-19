@@ -1,9 +1,9 @@
 # model.py
-import model
 import google.generativeai as genai
 import sqlite3
 import pandas as pd
 import imports  # Import the imports module
+
 
 # Define Your Prompt
 prompt = [
@@ -84,23 +84,23 @@ def execute_query(query):
         conn.close()
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(import.MODEL_NAME)
+    model = genai.GenerativeModel(imports.MODEL_NAME)  # Access MODEL_NAME from imports
     response = model.generate_content([prompt[0], question])
 
     # Access the 'text' attribute of the response
-    response_text = response.text 
+    response_text = response.text
 
     # Assuming the SQL query is enclosed in backticks
-    start = response_text.find("`") + 1  # Use response_text here
-    end = response_text.find("`", start)  # Use response_text here
-    sql_query = response_text[start:end]  # Use response_text here
+    start = response_text.find("`") + 1
+    end = response_text.find("`", start)
+    sql_query = response_text[start:end]
 
     # Execute the query and get the result
     result_df = execute_query(sql_query)
 
     # Check if the question is irrelevant
-    if "This question cannot be answered using the Taif medical institutions database" in response:
-        return response.strip()
+    if "This question cannot be answered using the Taif medical institutions database" in response_text:
+        return response_text.strip()
     
     # Return the result from the database
     if result_df is not None:
