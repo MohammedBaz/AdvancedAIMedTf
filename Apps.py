@@ -1,14 +1,5 @@
 import config
-import sqlite3
-import pandas as pd
-import random
-from tabulate import tabulate
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-import google.generativeai as genai
-import streamlit as st
+
 # Configure Genai Key
 genai.configure(api_key=config.API_KEY)  # Replace with your actual Gemini Pro API key
 
