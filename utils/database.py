@@ -24,3 +24,13 @@ def execute_query(query):
         print(f"Error executing SQL query: {e}")
     finally:
         conn.close()
+def format_results(results):
+    # ... (Implement your logic to format the results) ...
+    # Example:
+    if isinstance(results, list):
+        formatted_results = ""
+        for row in results:
+            formatted_results += f"{row[0]}: {row[1]}\n"  # Assuming two columns in the result
+        return formatted_results
+    else:
+        return "Results:\n" + str(results)
