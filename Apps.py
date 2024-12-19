@@ -16,7 +16,14 @@ genai.configure(api_key='YOUR_API_KEY')  # Replace with your actual Gemini Pro A
 
 # Define the number of random entries to create
 num_entries = 30  # Adjust as needed
-
+# Generate random data for medical institutions in Taif
+data = {
+    'Name': [],  # Initialize Name list here
+    'Type': [],  # Initialize Type list here
+    'District': [],  # Initialize District list here
+    'Beds': [],  # Initialize Beds list here
+    'Speciality': []  # Initialize Speciality list here
+}
 # Generate random data for medical institutions in Taif
 data = {
     'Name': [f'{random.choice(["Taif", "Al Hada", "Ash Shafa"])} {random.choice(["Clinic", "Hospital", "Medical Center"])} {i}' for i in range(1, num_entries + 1)],
