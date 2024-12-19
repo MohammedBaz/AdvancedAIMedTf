@@ -2,9 +2,7 @@
 
 from imports import *
 import model
-from utils.database import execute_query
 
-from model import get_gemini_response 
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
