@@ -13,11 +13,9 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Get user input
-if prompt := st.chat_input("Enter your question:"):
+if prompt := st.chat_input(""):  # Remove the placeholder text
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
 
     try:
         # Generate response using Gemini Pro
@@ -29,22 +27,14 @@ if prompt := st.chat_input("Enter your question:"):
 
         # Check if the question is irrelevant
         if "This question cannot be answered using the Taif medical institutions database" in contextualized_response:
-            with st.chat_message("assistant"):
-                # Display the full response for irrelevant questions
-                st.markdown(contextualized_response)  
+            # Display the full response for irrelevant questions
+            st.session_state.messages.append({"role": "assistant", "content": contextualized_response})  
         else:
             # Execute the query
             execute_query(sql_query)
 
-            # Display the generated SQL query and contextualized response
-            with st.chat_message("assistant"):
-                if sql_query:
-                    st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
-                if contextualized_response:
-                    st.markdown(contextualized_response)
-
-        # Add assistant message to chat history
-        st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
+            # Add assistant message to chat history
+            st.session_state.messages.append({"role": "assistant", "content": f"Generated SQL query:\n```sql\n{sql_query}\n```\n\n{contextualized_response}"})
 
     except Exception as e:
         with st.chat_message("assistant"):
