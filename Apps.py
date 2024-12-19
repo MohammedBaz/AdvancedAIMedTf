@@ -1,5 +1,5 @@
 from imports import *
-
+import model 
 # Streamlit app
 st.title("DDS for THC")
 
