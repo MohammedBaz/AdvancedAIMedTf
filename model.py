@@ -3,7 +3,7 @@
 import google.generativeai as genai
 import sqlite3
 import pandas as pd
-import imports 
+import imports  # Import the imports module
 
 # Define Your Prompt
 prompt = [
@@ -67,7 +67,7 @@ prompt = [
 ]
 
 def execute_query(query):
-    conn = sqlite3.connect(imports.DATABASE_NAME)
+    conn = sqlite3.connect(DATABASE_NAME)
     cur = conn.cursor()
     try:
         cur.execute(query)
@@ -84,7 +84,7 @@ def execute_query(query):
         conn.close()
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(imports.MODEL_NAME)
+    model = genai.GenerativeModel(MODEL_NAME)
     response = model.generate_content([prompt[0], question])
 
     # Access the 'text' attribute of the response
