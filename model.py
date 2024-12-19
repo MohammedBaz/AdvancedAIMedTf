@@ -84,7 +84,7 @@ def execute_query(query):
         conn.close()
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(MODEL_NAME)
+    model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
 
     # Assuming the SQL query is enclosed in backticks
