@@ -1,7 +1,7 @@
 # app.py
 
 from imports import *
-
+import model
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
