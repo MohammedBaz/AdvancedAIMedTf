@@ -1,11 +1,13 @@
 # model.py
-import imports
+
 import google.generativeai as genai
+import sqlite3
+import pandas as pd
 
 # Define Your Prompt
 prompt = [
     """
-    You are an expert in converting English questions to SQL query, retrieving information from the Taif medical institutions database, and providing contextualized responses that highlight the role of AI in healthcare.
+    You are an expert in converting English questions to SQL query, retrieving information from the Taif medical institutions database, and providing  answers based on the retrieved data.
 
     You should respond conversationally to greetings or general inquiries, but provide data-driven answers to specific questions about the Taif medical institutions.
 
@@ -17,8 +19,8 @@ prompt = [
     Instructions:
 
     - If the user greets you or asks a general question (e.g., "Hello," "How are you?"), respond in a friendly and professional manner.
-    - If the user asks a specific question about the Taif medical institutions that can be answered using the data in the tables, generate a SQL query to retrieve the necessary information from the database and provide a contextualized response that includes the query results.
-    - If the user asks a question that is not related to the Taif medical institutions or cannot be answered using the data, do not generate a SQL query. Instead, provide a message indicating that the question is not applicable or suggest alternative resources if available.
+    - If the user asks a specific question about the Taif medical institutions that can be answered using the data in the tables, generate a SQL query to retrieve the necessary information from the database, execute the query, and provide ONLY the answer based on the query results.
+    - If the user asks a question that is not related to the Taif medical institutions or cannot be answered using the data, provide a message indicating that the question is not applicable or suggest alternative resources if available.
 
     When answering questions, consider the following:
 
@@ -46,10 +48,9 @@ prompt = [
     Question: What is the average waiting time in hospital X?
 
     Answer:
+    
+    10 minutes
 
-    SQL query: `SELECT AVG(WaitingTime) FROM WaitingTimes WHERE Hospital = 'X';`
-
-    Context: The average waiting time in hospital X is 10 minutes. This is higher than the 2024 target of 5 minutes. To achieve the 2030 goal of 2 minutes, the hospital could consider AI-powered solutions for optimizing patient flow, such as appointment scheduling systems that predict patient arrival times and allocate resources accordingly.
 
     Example 2:
 
@@ -57,33 +58,50 @@ prompt = [
 
     Answer:
 
-    Context:  This question is not applicable to the Taif medical institutions database.
+    This question is not applicable to the Taif medical institutions database.
 
-    Please provide the SQL query and the contextualized response as your output.
+
+    Please provide ONLY the answer to the question as your output.
     """
 ]
 
+def execute_query(query):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
+        results = cur.fetchall()
+        # Get column names from cursor description
+        col_names = [desc[0] for desc in cur.description]
+        # Convert to DataFrame for easier handling
+        df = pd.DataFrame(results, columns=col_names)
+        return df
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+        return None
+    finally:
+        conn.close()
+
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(imports.MODEL_NAME)
-    response = model.generate_content([prompt[0], question])
-    return response.text
-
-def extract_sql_query(response):
-    # Assuming the SQL query is enclosed in backticks
-    start = response.find("`") + 1
-    end = response.find("`", start)
-    return response[start:end]
-
-def extract_contextualization(response):
-    # Assuming the context comes after the SQL query
-    start = response.find("`", response.find("`") + 1) + 1  # Find the second backtick
-    return response[start:].strip()
-
-def generate_sql_query(question, prompt):
-    model = genai.GenerativeModel(imports.MODEL_NAME)
+    model = genai.GenerativeModel(MODEL_NAME)
     response = model.generate_content([prompt[0], question])
 
     # Assuming the SQL query is enclosed in backticks
     start = response.find("`") + 1
     end = response.find("`", start)
-    return response[start:end]
+    sql_query = response[start:end]
+
+    # Execute the query and get the result
+    result_df = execute_query(sql_query)
+
+    # Check if the question is irrelevant
+    if "This question cannot be answered using the Taif medical institutions database" in response:
+        return response.strip()
+    
+    # Return the result from the database
+    if result_df is not None:
+        # Assuming the result is a single value, you might need to adjust this based on your query
+        answer = result_df.iloc[0, 0] if not result_df.empty else "No data found."
+        return str(answer)
+    else:
+        return "Error executing SQL query."
