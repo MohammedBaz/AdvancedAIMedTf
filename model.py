@@ -84,8 +84,8 @@ def execute_query(query):
         conn.close()
 
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(imports.MODEL_NAME)  # Access MODEL_NAME from imports
-    response = model.generate_content([prompt[0], question])
+    if "This question cannot be answered using the Taif medical institutions database" in response_text:
+        return response_text.strip()  # Return the response without executing the query
 
     # Access the 'text' attribute of the response
     response_text = response.text
