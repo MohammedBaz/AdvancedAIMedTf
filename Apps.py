@@ -5,7 +5,7 @@ import model
 
 # Initialize chat history
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages =
 
 # Get user input
 if prompt := st.chat_input(""):
@@ -35,8 +35,8 @@ if prompt := st.chat_input(""):
         st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
 
 # Display chat messages from history
-for message in st.session_state.messages:
-    with st.container(key=f"{message['role']}"):  # Add a key to the container
+for i, message in enumerate(st.session_state.messages):  # Add an index to the loop
+    with st.container(key=f"{message['role']}_{i}"):  # Include the index in the key
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
