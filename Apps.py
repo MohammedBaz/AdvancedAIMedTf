@@ -7,7 +7,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import google.generativeai as genai
-
+import streamlit as st
 # Configure Genai Key
 genai.configure(api_key=st.secrets["GeminiKey"])  # Replace with your actual Gemini Pro API key
 
@@ -125,7 +125,7 @@ def get_gemini_response(question, prompt):
 
 # --- Interface ---
 
-import streamlit as st
+
 
 # Function to execute SQL query and return results as DataFrame
 def execute_query(query):
