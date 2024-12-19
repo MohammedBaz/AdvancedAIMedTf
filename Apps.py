@@ -1,10 +1,12 @@
 from imports import *
 import model
 
-# Function to extract the contextualized response from the full response
+# Function to extract only the contextualized response
 def extract_contextualized_response(full_response):
-    if "Contextualized response:" in full_response:
-        return full_response.split("Contextualized response:")[1].strip()
+    # Look for the "Contextualized Response" section
+    if "Contextualized Response:" in full_response:
+        # Split and return the contextualized part
+        return full_response.split("Contextualized Response:")[1].strip()
     return full_response.strip()
 
 # Initialize chat history
@@ -20,18 +22,14 @@ if prompt := st.chat_input("Ask a question about Taif medical institutions"):
         # Generate response using the model
         response = get_gemini_response(prompt, model.prompt)
 
-        # Extract only the contextualized response (no SQL query)
+        # Extract only the contextualized response
         contextualized_response = extract_contextualized_response(response)
 
-        # Check if the question is irrelevant
-        if "This question cannot be answered using the Taif medical institutions database" in contextualized_response:
-            # Display the response for irrelevant questions
-            st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
-        else:
-            # Add contextualized assistant message to chat history
-            st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
+        # Add the cleaned-up assistant response to the chat history
+        st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
 
     except Exception as e:
+        # Handle exceptions and add error message to chat
         st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
 
 # Display chat messages from history
