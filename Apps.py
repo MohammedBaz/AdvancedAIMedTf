@@ -1,4 +1,3 @@
-
 import sqlite3
 import pandas as pd
 import random
@@ -16,6 +15,7 @@ genai.configure(api_key='YOUR_API_KEY')  # Replace with your actual Gemini Pro A
 
 # Define the number of random entries to create
 num_entries = 30  # Adjust as needed
+
 # Generate random data for medical institutions in Taif
 data = {
     'Name': [],
@@ -38,10 +38,10 @@ data['Speciality'] = [random.choice(['General Medicine', 'Pediatrics', 'Dental',
 # Create a DataFrame from the random data for medical institutions
 medical_df = pd.DataFrame(data)
 
-# Generate random data for waiting times
+# Generate random data for waiting times, ensuring consistent length
 waiting_times_data = {
-    'Hospital': medical_df[medical_df['Type'] == 'Hospital']['Name'].sample(frac=0.8, replace=True).tolist(),  # 80% of hospitals have waiting time data
-    'WaitingTime': [random.randint(5, 20) for _ in range(int(num_entries * 0.8))]  # Waiting time in minutes
+    'Hospital': medical_df[medical_df['Type'] == 'Hospital']['Name'].sample(n=medical_df[medical_df['Type'] == 'Hospital'].shape[0], replace=True).tolist(),  # Use n= to sample with replacement
+    'WaitingTime': [random.randint(5, 20) for _ in range(medical_df[medical_df['Type'] == 'Hospital'].shape[0])]  # Match the length of hospitals
 }
 
 # Create a DataFrame from the random data for waiting times
