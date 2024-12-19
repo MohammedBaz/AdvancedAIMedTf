@@ -1,7 +1,6 @@
 # app.py
 
 from imports import *
-import model  # Import the model module
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -12,45 +11,33 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Create columns for chat input and file uploader
-col1, col2 = st.columns([3, 1])  # Adjust column ratios as needed
+# Get user input
+if prompt := st.chat_input("Enter your question:"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-# Chat input in the first column
-with col1:
-    if prompt := st.chat_input("Enter your question:"):
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+    try:
+        # Generate response using Gemini Pro
+        response = get_gemini_response(prompt, model.prompt)  # Access prompt from model
 
-        try:
-            # Generate response using Gemini Pro
-            response = get_gemini_response(prompt, model.prompt)  # Access prompt from model
+        # Extract SQL query and contextualization
+        sql_query = extract_sql_query(response)
+        contextualized_response = extract_contextualization(response)
 
-            # Extract SQL query and contextualization
-            sql_query = extract_sql_query(response)
-            contextualized_response = extract_contextualization(response)
+        # Execute the query
+        execute_query(sql_query)
 
-            # Execute the query
-            execute_query(sql_query)
+        # Display the generated SQL query and contextualized response
+        with st.chat_message("assistant"):
+            st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
+            if contextualized_response:
+                st.markdown(contextualized_response)
 
-            # Display the generated SQL query and contextualized response
-            with st.chat_message("assistant"):
-                st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
-                if contextualized_response:
-                    st.markdown(contextualized_response)
+        # Add assistant message to chat history
+        st.session_state.messages.append({"role": "assistant", "content": f"Generated SQL query:\n```sql\n{sql_query}\n```\n\n{contextualized_response}"})
 
-            # Add assistant message to chat history
-            st.session_state.messages.append({"role": "assistant", "content": f"Generated SQL query:\n```sql\n{sql_query}\n```\n\n{contextualized_response}"})
-
-        except Exception as e:
-            with st.chat_message("assistant"):
-                st.markdown(f"Error: {e}")
-
-# File uploader in the second column
-with col2:
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        # Process the uploaded image
-        # ... (You can use libraries like OpenCV or Pillow to process the image) ...
-        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+    except Exception as e:
+        with st.chat_message("assistant"):
+            st.markdown(f"Error: {e}")
