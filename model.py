@@ -3,6 +3,7 @@
 import google.generativeai as genai
 import sqlite3
 import pandas as pd
+import imports 
 
 # Define Your Prompt
 prompt = [
