@@ -8,7 +8,7 @@ user_question = st.text_input("Enter your question:")
 
 if user_question:
     try:
-        response = get_gemini_response(user_question, prompt)
+        response = get_gemini_response(user_question, model.prompt)
 
         # You'll need to implement these functions to extract the SQL and context
         sql_query = extract_sql_query(response)
