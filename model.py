@@ -27,22 +27,11 @@ prompt = [
     """
 ]
 
-def execute_query(query):
-    conn = sqlite3.connect(imports.DATABASE_NAME)  # Access DATABASE_NAME from imports
-    cur = conn.cursor()
-    try:
-        cur.execute(query)
-        results = cur.fetchall()
-        # Get column names from cursor description
-        col_names = [desc[0] for desc in cur.description]
-        # Convert to DataFrame for easier handling
-        df = pd.DataFrame(results, columns=col_names)
-        return df
-    except Exception as e:
-        print(f"Error executing SQL query: {e}")
-        return None
-    finally:
-        conn.close()
+def extract_sql_query(response):
+    # Assuming the SQL query is enclosed in backticks
+    start = response.find("`") + 1
+    end = response.find("`", start)
+    return response[start:end]
 
 def get_gemini_response(question, prompt):
     model = genai.GenerativeModel(imports.MODEL_NAME)
