@@ -47,29 +47,10 @@ with col1:
             with st.chat_message("assistant"):
                 st.markdown(f"Error: {e}")
 
+# File uploader in the second column
 with col2:
-    st.markdown(
-        """
-        <style>
-        .stFileUploader > label {
-            display: none;
-        }
-        .stFileUploader > div > button {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-        </style>
-        <input type="file" id="fileUploader">
-        <button>Upload Image</button>
-        """,
-        unsafe_allow_html=True,
-    )
-    uploaded_file = st.session_state.get("fileUploader", None)
+    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    if uploaded_file is not None:
+        # Process the uploaded image
+        # ... (You can use libraries like OpenCV or Pillow to process the image) ...
+        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
