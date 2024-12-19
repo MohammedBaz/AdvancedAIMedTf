@@ -21,5 +21,6 @@ MODEL_NAME = "gemini-pro"
 
 # Import from the correct location
 from utils.database import execute_query
+
 # Only import get_gemini_response from model.py
-from model import get_gemini_response 
+from model import get_gemini_response
