@@ -48,9 +48,3 @@ with col1:
                 st.markdown(f"Error: {e}")
 
 # File uploader in the second column
-with col2:
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        # Process the uploaded image
-        # ... (You can use libraries like OpenCV or Pillow to process the image) ...
-        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
