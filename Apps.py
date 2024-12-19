@@ -1,6 +1,7 @@
 # app.py
 
-import model 
+import model
+
 from imports import *
 st.title("DDS for XHC")
 # Initialize chat history
