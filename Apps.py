@@ -18,20 +18,22 @@ genai.configure(api_key='YOUR_API_KEY')  # Replace with your actual Gemini Pro A
 num_entries = 30  # Adjust as needed
 # Generate random data for medical institutions in Taif
 data = {
-    'Name': [],  # Initialize Name list here
-    'Type': [],  # Initialize Type list here
-    'District': [],  # Initialize District list here
-    'Beds': [],  # Initialize Beds list here
-    'Speciality': []  # Initialize Speciality list here
+    'Name': [],
+    'Type': [],
+    'District': [],
+    'Beds': [],
+    'Speciality': []
 }
-# Generate random data for medical institutions in Taif
-data = {
-    'Name': [f'{random.choice(["Taif", "Al Hada", "Ash Shafa"])} {random.choice(["Clinic", "Hospital", "Medical Center"])} {i}' for i in range(1, num_entries + 1)],
-    'Type': [random.choice(['Hospital', 'Clinic', 'Pharmacy', 'Lab']) for _ in range(num_entries)],
-    'District': [random.choice(['Al Hawiyah', 'Al Khalidiyah', 'Al Faisaliyah', 'Al Qumariyah', 'An Nur']) for _ in range(num_entries)],
-    'Beds': [random.randint(10, 200) if 'Hospital' in t else None for t in data['Type']],
-    'Speciality': [random.choice(['General Medicine', 'Pediatrics', 'Dental', 'ENT', 'Dermatology', 'Ophthalmology']) for _ in range(num_entries)]
-}
+
+# Ensure all lists have the same length (num_entries)
+data['Name'] = [f'{random.choice(["Taif", "Al Hada", "Ash Shafa"])} {random.choice(["Clinic", "Hospital", "Medical Center"])} {i}' for i in range(1, num_entries + 1)]
+data['Type'] = [random.choice(['Hospital', 'Clinic', 'Pharmacy', 'Lab']) for _ in range(num_entries)]
+data['District'] = [random.choice(['Al Hawiyah', 'Al Khalidiyah', 'Al Faisaliyah', 'Al Qumariyah', 'An Nur']) for _ in range(num_entries)]
+
+# Calculate 'Beds' based on 'Type', ensuring the same length
+data['Beds'] = [random.randint(10, 200) if 'Hospital' in t else None for t in data['Type']]
+
+data['Speciality'] = [random.choice(['General Medicine', 'Pediatrics', 'Dental', 'ENT', 'Dermatology', 'Ophthalmology']) for _ in range(num_entries)]
 
 # Create a DataFrame from the random data for medical institutions
 medical_df = pd.DataFrame(data)
