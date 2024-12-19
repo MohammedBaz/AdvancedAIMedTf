@@ -87,10 +87,13 @@ def get_gemini_response(question, prompt):
     model = genai.GenerativeModel(imports.MODEL_NAME)
     response = model.generate_content([prompt[0], question])
 
+    # Access the 'text' attribute of the response
+    response_text = response.text 
+
     # Assuming the SQL query is enclosed in backticks
-    start = response.find("`") + 1
-    end = response.find("`", start)
-    sql_query = response[start:end]
+    start = response_text.find("`") + 1  # Use response_text here
+    end = response_text.find("`", start)  # Use response_text here
+    sql_query = response_text[start:end]  # Use response_text here
 
     # Execute the query and get the result
     result_df = execute_query(sql_query)
