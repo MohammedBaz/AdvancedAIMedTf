@@ -13,8 +13,11 @@ if prompt := st.chat_input(""):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     try:
-        # Generate response using the model
-        response = get_gemini_response(prompt, model.prompt)
+    # Generate response using the model
+    response = get_gemini_response(prompt, model.prompt)
+
+    # Extract the SQL query (call the function directly)
+    sql_query = model.extract_sql_query(response)  # Call the function directly on the model module
 
         # Check if the question is irrelevant
         if "This question cannot be answered using the Taif medical institutions database" in response:
