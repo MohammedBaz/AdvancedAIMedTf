@@ -1,0 +1,6 @@
+google-generativeai
+streamlit
+reportlab
+tabulate
+pandas
+sqlite3
