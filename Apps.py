@@ -1,26 +1,43 @@
+# app.py
+
 from imports import *
-import model 
-# Streamlit app
-st.title("DDS for THC")
+st.title("DDS for XHC")
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# User input
-user_question = st.text_input("Enter your question:")
+# Display chat messages from history
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-if user_question:
+# Get user input
+if prompt := st.chat_input("Enter your question:"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
     try:
-        response = get_gemini_response(user_question, model.prompt)
+        # Generate response using Gemini Pro
+        response = get_gemini_response(prompt, model.prompt)  # Access prompt from model
 
-        # You'll need to implement these functions to extract the SQL and context
+        # Extract SQL query and contextualization
         sql_query = extract_sql_query(response)
         contextualized_response = extract_contextualization(response)
 
-        st.write("Generated SQL query:", sql_query)
-
-        # Execute the query (if you have extracted the SQL query)
+        # Execute the query
         execute_query(sql_query)
 
-        if contextualized_response:
-            st.write(contextualized_response)
+        # Display the generated SQL query and contextualized response
+        with st.chat_message("assistant"):
+            st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
+            if contextualized_response:
+                st.markdown(contextualized_response)
+
+        # Add assistant message to chat history
+        st.session_state.messages.append({"role": "assistant", "content": f"Generated SQL query:\n```sql\n{sql_query}\n```\n\n{contextualized_response}"})
 
     except Exception as e:
-        st.write(f"Error: {e}")
+        with st.chat_message("assistant"):
+            st.markdown(f"Error: {e}")
