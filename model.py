@@ -1,5 +1,5 @@
 import google.generativeai as genai
-import config  # Import config here
+
 
 # Configure Genai Key
 genai.configure(api_key=config.API_KEY)
