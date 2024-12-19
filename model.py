@@ -46,8 +46,11 @@ prompt = [
     """
 ]
 
+
+
 def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel(MODEL_NAME)  # Access MODEL_NAME directly
+    import imports  # Import the imports module here
+    model = genai.GenerativeModel(imports.MODEL_NAME)  # Access MODEL_NAME from imports
     response = model.generate_content([prompt[0], question])
     return response.text
 
