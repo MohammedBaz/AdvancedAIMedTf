@@ -1,6 +1,3 @@
-!pip install tabulate
-!pip install google-generativeai
-!pip install reportlab
 
 import sqlite3
 import pandas as pd
