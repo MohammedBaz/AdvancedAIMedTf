@@ -1,7 +1,7 @@
 from imports import *  # Import everything from imports.py
 
 # Streamlit app
-st.title("NL2SQL with Gemini Pro and Contextualization")
+st.title("DDS for THC")
 
 # User input
 user_question = st.text_input("Enter your question:")
