@@ -1,27 +1,34 @@
 from imports import *
 import model
 
+# Function to extract the contextualized response from the full response
+def extract_contextualized_response(full_response):
+    if "Contextualized response:" in full_response:
+        return full_response.split("Contextualized response:")[1].strip()
+    return full_response.strip()
+
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Get user input
-if prompt := st.chat_input("Type your message here..."):
+if prompt := st.chat_input("Ask a question about Taif medical institutions"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     try:
-        # Generate response using Gemini Pro
+        # Generate response using the model
         response = get_gemini_response(prompt, model.prompt)
 
         # Extract only the contextualized response (no SQL query)
-        contextualized_response = extract_contextualization(response)
+        contextualized_response = extract_contextualized_response(response)
 
         # Check if the question is irrelevant
         if "This question cannot be answered using the Taif medical institutions database" in contextualized_response:
+            # Display the response for irrelevant questions
             st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
         else:
-            # Add only the meaningful response to chat history
+            # Add contextualized assistant message to chat history
             st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
 
     except Exception as e:
@@ -29,37 +36,22 @@ if prompt := st.chat_input("Type your message here..."):
 
 # Display chat messages from history
 for i, message in enumerate(st.session_state.messages):
-    role_class = "user-message" if message["role"] == "user" else "assistant-message"
     with st.container(key=f"{message['role']}_{i}"):
+        # Display messages with roles (user/assistant)
         with st.chat_message(message["role"]):
-            st.markdown(f"<div class='{role_class}'>{message['content']}</div>", unsafe_allow_html=True)
+            st.write(message["content"])
 
-# Add styling for chat alignment and colors
+# Add styling for the chat
 st.markdown(
     """
     <style>
-    /* Shared styles for all messages */
-    [data-testid="stChatMessage"] {
-        max-width: 80%;
-        margin: auto;
+    [data-testid="stChatMessage"][data-role="user"] .stChatMessageBox {
+        background-color: #f0f0f0;
+        border-radius: 10px 10px 10px 0px;
     }
-
-    /* User messages (question) styling */
-    .user-message {
-        text-align: left;
-        background-color: #fdebd0; /* Light orange for user */
-        border-radius: 10px;
-        padding: 10px;
-        margin: 5px 0;
-    }
-
-    /* Assistant messages (response) styling */
-    .assistant-message {
-        text-align: left;
-        background-color: #d6eaf8; /* Light blue for assistant */
-        border-radius: 10px;
-        padding: 10px;
-        margin: 5px 0;
+    [data-testid="stChatMessage"][data-role="assistant"] .stChatMessageBox {
+        background-color: #eaf7ff;
+        border-radius: 10px 10px 0px 10px;
     }
     </style>
     """,
