@@ -3,4 +3,4 @@ streamlit
 reportlab
 tabulate
 pandas
-sqlite3
+sqlite3==1.4.8
