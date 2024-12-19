@@ -14,15 +14,14 @@ if prompt := st.chat_input("Type your message here..."):
         # Generate response using Gemini Pro
         response = get_gemini_response(prompt, model.prompt)
 
-        # Extract contextualized response (removing SQL query)
+        # Extract only the contextualized response (no SQL query)
         contextualized_response = extract_contextualization(response)
 
         # Check if the question is irrelevant
         if "This question cannot be answered using the Taif medical institutions database" in contextualized_response:
-            # Add irrelevant response to chat history
             st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
         else:
-            # Add only the contextualized response to chat history
+            # Add only the meaningful response to chat history
             st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
 
     except Exception as e:
