@@ -78,6 +78,7 @@ print("Taif medical database created and populated with random data.")
 prompt = [
     """
     You are an expert in converting English questions to SQL query, retrieving information from the Taif medical institutions database, and providing contextualized responses that highlight the role of AI in healthcare.
+    
 
     The database has three tables:
     * MedicalInstitutions: Name, Type, District, Beds, Speciality
@@ -116,6 +117,15 @@ prompt = [
     Context: The average waiting time in hospital X is 10 minutes. This is higher than the 2024 target of 5 minutes. To achieve the 2030 goal of 2 minutes, the hospital could consider AI-powered solutions for optimizing patient flow, such as appointment scheduling systems that predict patient arrival times and allocate resources accordingly.
 
     Please provide the SQL query and the contextualized response as your output.
+    Question: Hi
+
+    Answer:
+
+    Context: Hello! How can I help you with information about Taif medical institutions?
+
+
+
+    
     """
 ]
 
