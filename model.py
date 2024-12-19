@@ -1,4 +1,5 @@
 # model.py
+
 import google.generativeai as genai
 
 # Define Your Prompt
@@ -15,14 +16,9 @@ prompt = [
 
     Instructions:
 
-    Instructions:
-
     - If the user greets you or asks a general question (e.g., "Hello," "How are you?"), respond in a friendly and professional manner.
     - If the user asks a specific question about the Taif medical institutions that can be answered using the data in the tables, generate a SQL query to retrieve the necessary information from the database and provide a contextualized response that includes the query results.
     - If the user asks a question that is not related to the Taif medical institutions or cannot be answered using the data, do not generate a SQL query. Instead, provide a message indicating that the question is not applicable or suggest alternative resources if available.
-
-    
-
 
     When answering questions, consider the following:
 
@@ -55,7 +51,6 @@ prompt = [
 
     Context: The average waiting time in hospital X is 10 minutes. This is higher than the 2024 target of 5 minutes. To achieve the 2030 goal of 2 minutes, the hospital could consider AI-powered solutions for optimizing patient flow, such as appointment scheduling systems that predict patient arrival times and allocate resources accordingly.
 
-
     Example 2:
 
     Question: dsf 
@@ -64,16 +59,12 @@ prompt = [
 
     Context:  This question is not applicable to the Taif medical institutions database.
 
-
     Please provide the SQL query and the contextualized response as your output.
     """
 ]
 
-
-
 def get_gemini_response(question, prompt):
-    import imports  # Import the imports module here
-    model = genai.GenerativeModel(imports.MODEL_NAME)  # Access MODEL_NAME from imports
+    model = genai.GenerativeModel(MODEL_NAME)
     response = model.generate_content([prompt[0], question])
     return response.text
 
@@ -87,3 +78,12 @@ def extract_contextualization(response):
     # Assuming the context comes after the SQL query
     start = response.find("`", response.find("`") + 1) + 1  # Find the second backtick
     return response[start:].strip()
+
+def generate_sql_query(question, prompt):
+    model = genai.GenerativeModel(MODEL_NAME)
+    response = model.generate_content([prompt[0], question])
+
+    # Assuming the SQL query is enclosed in backticks
+    start = response.find("`") + 1
+    end = response.find("`", start)
+    return response[start:end]
