@@ -5,7 +5,7 @@ import model
 
 # Initialize chat history
 if "messages" not in st.session_state:
-    st.session_state.messages =
+    st.session_state.messages = []
 
 # Get user input
 if prompt := st.chat_input(""):
