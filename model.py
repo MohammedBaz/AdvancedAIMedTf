@@ -67,7 +67,7 @@ prompt = [
 ]
 
 def execute_query(query):
-    conn = sqlite3.connect(DATABASE_NAME)
+    conn = sqlite3.connect(imports.DATABASE_NAME)
     cur = conn.cursor()
     try:
         cur.execute(query)
