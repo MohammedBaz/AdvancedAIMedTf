@@ -1,9 +1,11 @@
+# database_utils.py
+
 import sqlite3
 import pandas as pd
-from tabulate import tabulate  # Import tabulate here
+from tabulate import tabulate
 
 def execute_query(query):
-    conn = sqlite3.connect("taif_medical.db")  # Connect to the database (ensure it's in the repo)
+    conn = sqlite3.connect("taif_medical.db")  # Connect to the database file
     try:
         # Split multiple SQL statements
         for stmt in query.split(";"):
