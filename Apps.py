@@ -10,7 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import google.generativeai as genai
 import streamlit as st
 # Configure Genai Key
-genai.configure(api_key=API_KEY)  # Replace with your actual Gemini Pro API key
+genai.configure(api_key=config.API_KEY)  # Replace with your actual Gemini Pro API key
 
 
 # --- Database Generation ---
