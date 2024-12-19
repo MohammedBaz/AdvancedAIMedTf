@@ -1,5 +1,3 @@
-# app.py
-
 from imports import *
 import model
 
@@ -8,7 +6,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Get user input
-if prompt := st.chat_input(""):  # Remove the placeholder text
+if prompt := st.chat_input(""):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -32,10 +30,9 @@ if prompt := st.chat_input(""):  # Remove the placeholder text
             st.session_state.messages.append({"role": "assistant", "content": f"Generated SQL query:\n```sql\n{sql_query}\n```\n\n{contextualized_response}"})
 
     except Exception as e:
-        with st.chat_message("assistant"):
-            st.markdown(f"Error: {e}")
+        st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
 
-# Display chat messages from history (moved outside the input handling block)
+# Display chat messages from history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
