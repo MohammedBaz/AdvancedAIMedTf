@@ -30,13 +30,17 @@ if prompt := st.chat_input("Enter your question:"):
 
                     # Display the generated SQL query and contextualized response
                     with st.chat_message("assistant"):
-                        if sql_query:  # Check if there is a SQL query to display
-                            st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
-                        if contextualized_response:
-                            st.markdown(contextualized_response)
+                                if sql_query:  # Check if there is a SQL query to display
+                                            st.markdown(f"Generated SQL query:\n```sql\n{sql_query}\n```")
+                                if contextualized_response:
+                                            st.markdown(contextualized_response)  # Only display the contextualized response once
 
-                # Add assistant message to chat history
-                st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
+            # Add assistant message to chat history (modified)
+                    st.session_state.messages.append({"role": "assistant", "content": contextualized_response})
+                            
+                            
+                            
+                         
 
             except Exception as e:
                 with st.chat_message("assistant"):
