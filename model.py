@@ -61,6 +61,7 @@ prompt = [
 
     Please provide the SQL query and the contextualized response as your output.
     """
+]
 
 
 
