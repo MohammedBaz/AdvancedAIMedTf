@@ -3,7 +3,7 @@
 import streamlit as st
 
 # Access the API key from Streamlit secrets
-API_KEY = st.secrets["API_KEY"]
+API_KEY = st.secrets["GeminiKey"]
 
 # Database settings
 DATABASE_NAME = "taif_medical.db"
